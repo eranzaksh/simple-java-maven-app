@@ -29,7 +29,9 @@ jobs:
         cache: maven
         
     - name: get version
-      run: version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+      run: |
+        version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        echo "Current version: $version"
       
     - name: update patch version
       run: version=$(echo ${version} |  awk -F'.' '{print $1"."$2"."$3+1}' |  sed s/[.]$//)
