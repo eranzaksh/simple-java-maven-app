@@ -14,10 +14,6 @@ on:
   pull_request:
     branches: [ "master" ]
 
-
-env:
-  build-number: ${GITHUB_RUN_NUMBER}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,7 +27,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-
+        
+    - name: get version
+      run: version=$(mvn -q -U -Dexpression=project.version -DforceStdout maven-help-plugin:evaluate)
+      
+    - name: update patch version
+      run: version=$(echo ${version} |  awk -F'.' '{print $1"."$2"."$3+1}' |  sed s/[.]$//)
 
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
