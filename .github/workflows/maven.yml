@@ -45,6 +45,23 @@ jobs:
       - name: Push the Docker image
         id: push-docker-image
         run: docker push eranzaksh/infinity:actions
+      - name: Get version
+        run: |
+          current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Current version: $current_version"
+          version=$(echo ${current_version} | awk -F'.' '{print $1"."$2"."$3+1}')
+          echo "New version: $version"
+          mvn versions:set -DnewVersion=$version
+      
+      - name: Commit and push version update
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add pom.xml
+          git commit -m "Increment version to $version"
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -65,23 +82,7 @@ jobs:
             exit
           EOF
 
-      - name: Get version
-        run: |
-          current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "Current version: $current_version"
-          version=$(echo ${current_version} | awk -F'.' '{print $1"."$2"."$3+1}')
-          echo "New version: $version"
-          mvn versions:set -DnewVersion=$version
 
-      - name: Commit and push version update
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add pom.xml
-          git commit -m "Increment version to $version"
-          git push origin master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     # - name: Update dependency graph
