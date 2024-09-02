@@ -62,7 +62,8 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
             docker run -d --rm eranzaksh/infinity:actions
-            EOF
+            exit
+          EOF
 
       - name: Get version
         run: |
