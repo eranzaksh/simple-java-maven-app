@@ -57,7 +57,7 @@ jobs:
 
       - name: Deploy to server
         env:
-          REMOTE_USER: ubuntu
+          REMOTE_USER: ec2-user
           REMOTE_HOST: 13.60.197.253
           DOCKER_IMAGE: eranzaksh/infinity:actions
         run: |
