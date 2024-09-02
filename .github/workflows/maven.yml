@@ -59,11 +59,9 @@ jobs:
         env:
           REMOTE_USER: ec2-user
           REMOTE_HOST: 13.60.197.253
-          DOCKER_IMAGE: eranzaksh/infinity:actions
         run: |
           ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
-            docker pull $DOCKER_IMAGE
-            docker run -d --rm $DOCKER_IMAGE
+            docker run -d --rm eranzaksh/infinity:actions
           EOF
 
       - name: Get version
