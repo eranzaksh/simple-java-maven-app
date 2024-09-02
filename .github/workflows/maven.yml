@@ -54,9 +54,6 @@ jobs:
         echo "New version: $version"
         mvn versions:set -DnewVersion=$version
 
-    - name: Show changes in pom.xml
-      run: git diff HEAD^ HEAD -- pom.xml
-
     - name: Commit and push version update
       run: |
         git config --local user.email "actions@github.com"
