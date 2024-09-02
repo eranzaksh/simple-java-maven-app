@@ -39,6 +39,22 @@ jobs:
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
 
+    - name: login to docker hub
+      id: docker-hub
+      env:
+        username: ${{secrets.DOCKER_HUB_PASSWORD}}
+        password: ${{secrets.DOCKER_HUB_PASSWORD}}
+        run: |
+          docker login -u $username -p $password 
+    - name: build the docker image
+      id: build-docker-image
+      run: |
+        ls -la 
+        docker build . -f Dockerfile -t eranzaksh/infinity:actions
+    - name: push the docker image
+      id: push-docker-image
+      run: docker push ${{secrets.DOCKERHUB_USERNAME}}/demo-image-test:latest
+
     - name: Commit and push version update
       run: |
         git config --local user.email "actions@github.com"
