@@ -79,7 +79,7 @@ jobs:
           REMOTE_HOST: 13.60.197.253
         run: |
           ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
-            docker run -d --rm eranzaksh/infinity:actions
+            docker run --rm eranzaksh/infinity:actions
             exit
           EOF
 
