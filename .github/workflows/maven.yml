@@ -45,6 +45,7 @@ jobs:
       - name: Push the Docker image
         id: push-docker-image
         run: docker push eranzaksh/infinity:actions
+        
       - name: Get version
         run: |
           current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
