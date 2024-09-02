@@ -46,6 +46,22 @@ jobs:
       id: push-docker-image
       run: docker push eranzaksh/infinity:actions
 
+    - name: Add SSH key
+      uses: webfactory/ssh-agent@v0.8.1
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy to server
+      env:
+        REMOTE_USER: ubuntu
+        REMOTE_HOST: 13.60.197.253
+        DOCKER_IMAGE: eranzaksh/infinity:actions
+      run: |
+        ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
+          docker pull $DOCKER_IMAGE
+          docker run -d --rm $DOCKER_IMAGE
+          EOF
+
     - name: get version
       run: |
         current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
