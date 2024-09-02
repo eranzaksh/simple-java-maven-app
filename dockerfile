@@ -10,5 +10,5 @@ RUN mvn -B clean package --file pom.xml
 
 FROM openjdk:17-slim
 WORKDIR /app
-COPY --from=build /app/target/*.jar /app/target/.
-CMD ["ls", "/app/target"]
+COPY --from=build /app/target/*.jar /app/target/app.jar
+CMD ["sh", "-c", "java -jar /app/target/app.jar"]
